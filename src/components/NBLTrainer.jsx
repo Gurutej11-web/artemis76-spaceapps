@@ -7,12 +7,14 @@ export default function NBLTrainer() {
   const [taskState, setTaskState] = useState("ready");
   const simRef = useRef({ vy: 0, y: 0 });
 
+  // Calculate neutral value
   const neutralValue = (() => {
-    const rho = 1000;
+    const rho = 1000; // water density
     const diff = rho * volume - mass;
     return Math.max(-1, Math.min(1, diff / 200));
   })();
 
+  // Update status text dynamically
   useEffect(() => {
     if (Math.abs(neutralValue) < 0.06) {
       setStatus("✅ Neutral Buoyancy Achieved!");
@@ -23,6 +25,7 @@ export default function NBLTrainer() {
     }
   }, [neutralValue]);
 
+  // Start a simulated task
   function startTask() {
     setTaskState("inprogress");
     setTimeout(() => {
@@ -32,15 +35,16 @@ export default function NBLTrainer() {
   }
 
   return (
-    <section id="nbl" className="p-8 max-w-6xl mx-auto bg-slate-900/60 rounded-lg mt-8">
-      <h2 className="text-2xl font-bold mb-3">Neutral Buoyancy Lab — Trainer</h2>
+    <section id="nbl" className="p-8 max-w-6xl mx-auto bg-gray-900/70 rounded-lg mt-12">
+      <h2 className="text-3xl font-bold mb-3 text-sky-400">Neutral Buoyancy Lab — Trainer</h2>
       <p className="text-slate-300 mb-4">
-        Use the sliders to mimic adjusting mass and volume to achieve neutral buoyancy — just like astronauts training underwater at NASA’s NBL.
+        Adjust mass and volume to simulate astronaut training underwater. Reach neutral buoyancy like real astronauts at NASA’s NBL.
       </p>
 
       <div className="grid md:grid-cols-2 gap-6">
-        <div className="p-4 bg-slate-800 rounded-lg">
-          <div className="mb-3">
+        {/* Simulation Controls */}
+        <div className="p-4 bg-gray-800 rounded-lg">
+          <div className="mb-4">
             <label className="text-sm">Mass (kg)</label>
             <input
               type="range"
@@ -53,7 +57,7 @@ export default function NBLTrainer() {
             <div className="text-xs text-slate-300">{mass} kg</div>
           </div>
 
-          <div className="mb-3">
+          <div className="mb-4">
             <label className="text-sm">Volume (m³)</label>
             <input
               type="range"
@@ -67,9 +71,9 @@ export default function NBLTrainer() {
             <div className="text-xs text-slate-300">{volume.toFixed(3)} m³</div>
           </div>
 
-          <div className="mb-3">
+          <div className="mb-4">
             <div className="text-sm text-slate-200">Neutral Indicator</div>
-            <div className="w-full bg-slate-700 rounded h-3 relative mt-2">
+            <div className="w-full bg-gray-700 rounded h-3 relative mt-2">
               <div
                 style={{ left: `${(neutralValue + 1) / 2 * 100}%`, width: 2 }}
                 className="absolute top-0 bottom-0 bg-sky-400"
@@ -78,7 +82,7 @@ export default function NBLTrainer() {
             <div className="text-xs text-slate-400 mt-2">{status}</div>
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex gap-3 items-center">
             <button
               onClick={startTask}
               className="px-4 py-2 bg-emerald-600 rounded hover:bg-emerald-500"
@@ -91,11 +95,15 @@ export default function NBLTrainer() {
           </div>
         </div>
 
-        <div className="p-4 bg-slate-800 rounded-lg flex flex-col items-center justify-center">
-          <img src="/assets/nbl.jpg" alt="Astronaut training in NBL" className="rounded-md max-h-[320px] object-cover mb-4" />
-          <div className="text-slate-300 text-sm">
-            The NBL lets astronauts simulate spacewalks underwater — perfecting repairs and movement in a microgravity-like environment.
-          </div>
+        {/* NBL Educational Info */}
+        <div className="p-4 bg-gray-800 rounded-lg text-slate-300">
+          <h3 className="font-semibold mb-2">About the NBL</h3>
+          <p className="mb-2">
+            The Neutral Buoyancy Lab is a huge pool where astronauts train for spacewalks. Adjusting mass and volume underwater helps simulate microgravity conditions.
+          </p>
+          <p className="mb-2">
+            Observing buoyancy and practicing precise movements underwater allows astronauts to perfect repairs, tool handling, and body positioning for space missions.
+          </p>
         </div>
       </div>
     </section>
