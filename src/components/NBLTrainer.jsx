@@ -1,69 +1,31 @@
-import { useState, useRef, useEffect } from "react";
-
-/**
- * Simple NBL trainer:
- * - User adjusts mass/volume sliders to reach neutral buoyancy
- * - Visual indicator and small "task" meter show success
- * - This is a simplified physics model for educational/demo use
- */
+import { useState, useEffect, useRef } from "react";
 
 export default function NBLTrainer() {
-  const [mass, setMass] = useState(90); // kg
-  const [volume, setVolume] = useState(0.09); // m^3
-  const [status, setStatus] = useState("Adjust sliders until neutral buoyancy (indicator centered).");
-  const [taskState, setTaskState] = useState("ready"); // ready | inprogress | success | fail
+  const [mass, setMass] = useState(90);
+  const [volume, setVolume] = useState(0.09);
+  const [status, setStatus] = useState("Adjust sliders to reach neutral buoyancy.");
+  const [taskState, setTaskState] = useState("ready");
   const simRef = useRef({ vy: 0, y: 0 });
 
-  // compute neutral indicator value (-1 .. 1)
   const neutralValue = (() => {
-    const rho = 1000; // kg/m^3
-    const diff = rho * volume - mass; // positive => buoyant, negative => sink
+    const rho = 1000;
+    const diff = rho * volume - mass;
     return Math.max(-1, Math.min(1, diff / 200));
   })();
 
   useEffect(() => {
-    // update status hint
     if (Math.abs(neutralValue) < 0.06) {
-      setStatus("Very close to neutral buoyancy — good for precise tasks.");
+      setStatus("✅ Neutral Buoyancy Achieved!");
     } else if (neutralValue > 0.06) {
-      setStatus("Too buoyant: you will float upward. Add weight or reduce volume.");
+      setStatus("⬆️ Too buoyant — add weight or reduce volume.");
     } else {
-      setStatus("Too heavy: you will sink. Add floatation or reduce weight.");
+      setStatus("⬇️ Too heavy — reduce weight or add floatation.");
     }
   }, [neutralValue]);
-
-  // simple physics loop that updates simRef.y for visualization (not used heavily)
-  useEffect(() => {
-    let mounted = true;
-    const rho = 1000;
-    const g = 9.81;
-    const k = 12;
-    function step() {
-      if (!mounted) return;
-      const m = mass;
-      const V = Math.max(0.001, volume);
-      const Fb = rho * V * g;
-      const W = m * g;
-      const vy = simRef.current.vy;
-      const Fnet = Fb - W - k * vy;
-      const ay = Fnet / m;
-      const newVy = vy + ay * 0.016;
-      let newY = simRef.current.y + newVy * 0.016;
-      // clamp visualization bounds
-      if (newY < -1) { newY = -1; simRef.current.vy = 0; }
-      else if (newY > 1) { newY = 1; simRef.current.vy = 0; }
-      else simRef.current.vy = newVy;
-      simRef.current.y = newY;
-      requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-    return () => { mounted = false; };
-  }, [mass, volume]);
 
   function startTask() {
     setTaskState("inprogress");
     setTimeout(() => {
-      // success if neutralValue is close to 0
       if (Math.abs(neutralValue) < 0.06) setTaskState("success");
       else setTaskState("fail");
     }, 3000);
@@ -73,7 +35,7 @@ export default function NBLTrainer() {
     <section id="nbl" className="p-8 max-w-6xl mx-auto bg-slate-900/60 rounded-lg mt-8">
       <h2 className="text-2xl font-bold mb-3">Neutral Buoyancy Lab — Trainer</h2>
       <p className="text-slate-300 mb-4">
-        Use the sliders to mimic adjusting mass and displaced volume to reach neutral buoyancy — the condition astronauts aim for when training underwater.
+        Use the sliders to mimic adjusting mass and volume to achieve neutral buoyancy — just like astronauts training underwater at NASA’s NBL.
       </p>
 
       <div className="grid md:grid-cols-2 gap-6">
@@ -92,7 +54,7 @@ export default function NBLTrainer() {
           </div>
 
           <div className="mb-3">
-            <label className="text-sm">Displaced Volume (m³)</label>
+            <label className="text-sm">Volume (m³)</label>
             <input
               type="range"
               min="0.01"
@@ -106,7 +68,7 @@ export default function NBLTrainer() {
           </div>
 
           <div className="mb-3">
-            <div className="text-sm text-slate-200">Neutral indicator</div>
+            <div className="text-sm text-slate-200">Neutral Indicator</div>
             <div className="w-full bg-slate-700 rounded h-3 relative mt-2">
               <div
                 style={{ left: `${(neutralValue + 1) / 2 * 100}%`, width: 2 }}
@@ -130,9 +92,9 @@ export default function NBLTrainer() {
         </div>
 
         <div className="p-4 bg-slate-800 rounded-lg flex flex-col items-center justify-center">
-          <img src="/assets/nbl.jpg" alt="NBL training" className="rounded-md max-h-[320px] object-cover mb-4" />
+          <img src="/assets/nbl.jpg" alt="Astronaut training in NBL" className="rounded-md max-h-[320px] object-cover mb-4" />
           <div className="text-slate-300 text-sm">
-            The NBL is a large pool where astronauts practice EVAs underwater. Neutral buoyancy lets them train complex tasks safely.
+            The NBL lets astronauts simulate spacewalks underwater — perfecting repairs and movement in a microgravity-like environment.
           </div>
         </div>
       </div>

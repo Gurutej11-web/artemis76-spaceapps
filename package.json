@@ -2,17 +2,22 @@
   "name": "artemis76-spaceapps",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-three/drei": "^9.122.0",
+    "@react-three/fiber": "^8.18.0",
     "framer-motion": "^7.6.12",
-    "lucide-react": "^0.294.0",
+    "leaflet": "^1.9.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "recharts": "^2.8.0"
+    "react-leaflet": "^4.2.1",
+    "recharts": "^2.8.0",
+    "three": "^0.158.0"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.0.0",
