@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import CupolaView from "./components/CupolaView";
@@ -35,7 +36,7 @@ export default function App() {
           x: Math.random() * window.innerWidth,
           y: Math.random() * window.innerHeight / 2,
           len: Math.random() * 150 + 50,
-          angle: Math.PI / 12, // 15 degrees downward
+          angle: Math.PI / 12,
           speed: Math.random() * 8 + 4,
           opacity: Math.random() * 0.5 + 0.5,
         });
@@ -56,7 +57,7 @@ export default function App() {
       ctx.fillStyle = "#000010";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Draw background stars
+      // Draw stars
       stars.forEach((s) => {
         ctx.beginPath();
         ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
@@ -87,11 +88,9 @@ export default function App() {
         ctx.lineWidth = 2;
         ctx.stroke();
 
-        // Move star
         s.x += s.speed * Math.cos(s.angle);
         s.y += s.speed * Math.sin(s.angle);
 
-        // Reset if offscreen
         if (s.x > canvas.width || s.y > canvas.height) {
           s.x = Math.random() * canvas.width * 0.5;
           s.y = Math.random() * canvas.height * 0.3;
@@ -133,6 +132,33 @@ export default function App() {
             </p>
           </header>
 
+          {/* 🔹 NEW — Interactive Simulations Section */}
+          <section className="text-center my-12">
+            <h2 className="text-3xl font-bold text-sky-400 mb-6">
+              Interactive Space Simulations
+            </h2>
+            <div className="flex flex-wrap justify-center gap-6">
+              <Link
+                to="/orbit"
+                className="px-6 py-3 bg-sky-600 hover:bg-sky-500 rounded-lg font-semibold"
+              >
+                🛰 Orbital Velocity Simulator
+              </Link>
+              <Link
+                to="/temperature"
+                className="px-6 py-3 bg-orange-600 hover:bg-orange-500 rounded-lg font-semibold"
+              >
+                ☀️ Space Temperature Experiment
+              </Link>
+              <Link
+                to="/comm"
+                className="px-6 py-3 bg-green-600 hover:bg-green-500 rounded-lg font-semibold"
+              >
+                📡 ISS Communication Delay Test
+              </Link>
+            </div>
+          </section>
+
           {/* Cupola View */}
           <CupolaView />
 
@@ -142,7 +168,7 @@ export default function App() {
           {/* Info Panel */}
           <InfoPanel />
 
-          {/* Expanded NASA Education Section */}
+          {/* NASA Educational Insights (unchanged) */}
           <section
             id="nasa-resources"
             className="p-8 max-w-6xl mx-auto mt-12 bg-gray-900/80 rounded-lg shadow-lg"
@@ -157,14 +183,12 @@ export default function App() {
                   The Cupola on the ISS provides astronauts with unparalleled
                   observation opportunities. They capture imagery of Earth for
                   monitoring climate change, natural disasters, and urban
-                  development. These high-resolution images help scientists
-                  understand atmospheric and terrestrial processes.
+                  development.
                 </p>
                 <p className="text-sm">
                   Astronauts can also use the Cupola to document temporary
-                  phenomena such as auroras, storms, and wildfires in real
-                  time. This visual data supports environmental research and
-                  public outreach.
+                  phenomena such as auroras, storms, and wildfires. This data
+                  supports environmental research and public outreach.
                 </p>
               </div>
               <div>
@@ -174,21 +198,18 @@ export default function App() {
                 <p className="text-sm mb-2">
                   Astronauts train in the Neutral Buoyancy Lab (NBL) to simulate
                   microgravity underwater. This training prepares them for
-                  extravehicular activities, repairs, and precise maneuvers in
-                  space.
+                  extravehicular activities, repairs, and precise maneuvers.
                 </p>
                 <p className="text-sm">
                   The NBL provides realistic feedback for handling tools,
-                  moving heavy objects, and coordinating tasks, ensuring
-                  astronauts are fully prepared for real ISS missions.
+                  moving heavy objects, and coordinating tasks.
                 </p>
               </div>
               <div>
                 <h3 className="font-semibold mb-2">Station Research & Tech</h3>
                 <p className="text-sm">
-                  The ISS is a hub for international science, hosting experiments
-                  in physics, biology, human physiology, and materials science.
-                  Data collected aids research on Earth and future deep space
+                  The ISS hosts experiments in physics, biology, and materials
+                  science. Data aids research on Earth and future deep space
                   missions.
                 </p>
               </div>
@@ -197,9 +218,8 @@ export default function App() {
                   Environmental & EVA Science
                 </h3>
                 <p className="text-sm">
-                  Extravehicular activity (EVA) research ensures astronauts
-                  safely conduct spacewalks. Training focuses on environmental
-                  awareness, tool use, and human physiological monitoring.
+                  EVA research ensures astronauts safely conduct spacewalks and
+                  monitors human physiology in space.
                 </p>
               </div>
             </div>
